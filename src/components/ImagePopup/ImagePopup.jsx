@@ -1,4 +1,4 @@
-import closeIcon from "../../../images/Close-Icon.svg";
+
 
 export default function ImagePopup(props) {
     const { card } = props;
@@ -12,5 +12,5 @@ export default function ImagePopup(props) {
           </div>
           <p className="popup__image-title">{card.name}</p>
         </>
-    ) 
+    )
 }

@@ -8,6 +8,11 @@ import Main from "./Main/Main.jsx";
 import CurrentUserContext from '../contexts/CurrentUserContext.js';
 import ProtectedRoute from './ProtectedRoute/ProtectedRoute.jsx';
 import Login from "./Login/Login.jsx"
+import Signup from "./Register/Register.jsx"
+import InfoTooltipSucess from './InfoTooltip/InfoTooltipSucess.jsx';
+import InfoTooltipFail from './InfoTooltip/InfoTooltipFail.jsx';
+import Popup from './Main/Popup/Popup.jsx';
+
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
@@ -82,8 +87,11 @@ function App() {
 
 
 return (
+  <>
     <Routes>
-      <Route path="/login" element={<Login />} />
+      <Route path="/login" element={<Login handleOpenPopup={handleOpenPopup} />} />
+      <Route path="/signup" element={<Signup />} />
+
       <Route
         path="/"
         element={
@@ -107,7 +115,8 @@ return (
         }
       />
     </Routes>
-  );
+  </>
+);
 }
 
 export default App

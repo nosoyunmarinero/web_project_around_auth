@@ -13,18 +13,18 @@ export default function Card(props) {
     children: <ImagePopup card={{ name, link }} />
   };
 
-  const confirmationPopup = { 
-    title: "¿Estás seguro/a?", 
-    children: <DeleteConfirm 
-      cardId={props.card._id} 
-      onCardDelete={props.onCardDelete} 
-    /> 
+  const confirmationPopup = {
+    title: "¿Estás seguro/a?",
+    children: <DeleteConfirm
+      cardId={props.card._id}
+      onCardDelete={props.onCardDelete}
+    />
   };
 
-  const cardLikeButtonClassName = 
+  const cardLikeButtonClassName =
     isLiked ? 'element__like-button-active' : 'element__like-button'
   ;
-  
+
   function handleLikeClick() {
     props.onCardLike(props.card);
   }
@@ -32,7 +32,7 @@ export default function Card(props) {
   function handleDeleteClick() {
     props.onCardDelete(props.card);
   }
-  
+
   return (
     <div className="element">
       <button className="element__button-image" onClick={() => handleOpenPopup(imageComponent)}>
@@ -47,7 +47,7 @@ export default function Card(props) {
       </button>
       <div className="element__description">
         <p className="element__title" id="card-title">{name}</p>
-        <button className={cardLikeButtonClassName} onClick={handleLikeClick}> 
+        <button className={cardLikeButtonClassName} onClick={handleLikeClick}>
         </button>
       </div>
     </div>

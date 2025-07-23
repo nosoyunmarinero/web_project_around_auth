@@ -18,7 +18,7 @@ class FormValidator {
 
     }
   }
-  
+
   hideInputError(inputElement) {
     const errorElement = this.formRef.querySelector(`#${inputElement.id}-error`);
     if (errorElement) {
