@@ -1,0 +1,38 @@
+.element__modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: "inter", sans-serif;
+    z-index: 3;
+  }
+  
+
+  .popup__image-content {
+    max-width: 816px;
+    max-height: 540px;
+  }
+  
+  .popup__image-title {
+    color: white;
+    font-family: "inter", sans-serif;
+    font-weight: 291;
+    
+  }
+  
+.popup__close_button {
+    position: absolute;
+    display: flex;
+    top: -40px;
+    right: -40px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+  }
+  
+  .element__close-button:hover {
+    opacity: 0.5;
+  }
+  
+  

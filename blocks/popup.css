@@ -1,0 +1,23 @@
+
+
+.popup__image {
+  position: relative;
+  max-width: 75vw;
+  max-height: 75vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup__image-content {
+  max-width: 100%;
+  max-height: 75vh;
+  object-fit: contain;
+}
+
+.popup__image-title {
+  margin: 10px 0 0;
+  font-size: 12px;
+  line-height: 15px;
+  color: #fff;
+}

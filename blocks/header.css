@@ -1,0 +1,43 @@
+.header {
+  display: flex;
+  max-width: 880px;
+  width: 100%;
+  margin: 45px 200px 40px 200px;
+  padding-bottom: 41px;
+  border-bottom: 1px solid #545454;
+}
+
+.header__logo {
+  display: block;
+  max-width: 173px;
+  width: 100%;
+}
+
+@media screen and (max-width: 880px) {
+  .header {
+    max-width: 600px;
+    margin: 45px 200px 40px 200px;
+    padding-bottom: 41px;
+  }
+
+  .header__logo {
+    margin-left: 20px;
+    max-width: 150px;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 590px) {
+  .header {
+    max-width: 320px;
+    width: 100%;
+  }
+
+  .header__logo {
+    margin-top: 28px;
+    margin-left: 27px;
+    max-width: 126px;
+    width: 100%;
+    padding: 0;
+  }
+}
