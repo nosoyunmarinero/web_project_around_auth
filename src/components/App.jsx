@@ -5,6 +5,8 @@ import api from "../utils/api.js";
 import Header from "./Header/Header.jsx";
 import Main from "./Main/Main.jsx";
 import CurrentUserContext from '../contexts/CurrentUserContext.js';
+import ProtectedRoute from './ProtectedRoute/ProtectedRoute.jsx';
+
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
@@ -31,7 +33,7 @@ function App() {
       });
     })();
   }
-  
+
   const handleUpdateUser = (data) => {
     (async () => {
       await api.setUserInfo(data).then((newData) => {
@@ -53,14 +55,14 @@ function App() {
   function handleOpenPopup(popup) {
     setPopup(popup);
   }
-  
+
   function handleClosePopup() {
     setPopup(null);
   }
 
   async function handleCardLike(card) {
     const isLiked = card.isLiked;
-    
+
     // Envía una solicitud a la API y obtén los datos actualizados de la tarjeta
     await api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
         setCards((state) =>
@@ -68,7 +70,7 @@ function App() {
              currentCard._id === card._id ? newCard : currentCard));
     }).catch((error) => console.error(error));
   }
-  
+
 
   async function handleCardDelete(cardId) {
   await api.deleteCard(cardId).then(() => {
@@ -79,11 +81,12 @@ function App() {
 
 
   return (
-    
+
       <div className="page__content">
       <CurrentUserContext.Provider value={{currentUser, handleUpdateUser}}>
         <Header />
-      <Main 
+        <ProtectedRoute isLoggedIn={true}>
+      <Main
         onOpenPopup={handleOpenPopup}
         onClosePopup={handleClosePopup}
         onUpdateAvatar={handleUpdateAvatar}
@@ -93,9 +96,10 @@ function App() {
         onCardDelete={handleCardDelete}
         onCardSubmit={handleAddPlaceSubmit}
       />
+      </ProtectedRoute>
       </CurrentUserContext.Provider>
     </div>
-    
+
   )
 }
 
