@@ -1,4 +1,5 @@
 import { useState,useEffect } from 'react'
+import { Routes, Route } from "react-router-dom";
 
 
 import api from "../utils/api.js";
@@ -6,7 +7,7 @@ import Header from "./Header/Header.jsx";
 import Main from "./Main/Main.jsx";
 import CurrentUserContext from '../contexts/CurrentUserContext.js';
 import ProtectedRoute from './ProtectedRoute/ProtectedRoute.jsx';
-
+import Login from "./Login/Login.jsx"
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
@@ -80,27 +81,33 @@ function App() {
   }
 
 
-  return (
-
-      <div className="page__content">
-      <CurrentUserContext.Provider value={{currentUser, handleUpdateUser}}>
-        <Header />
-        <ProtectedRoute isLoggedIn={true}>
-      <Main
-        onOpenPopup={handleOpenPopup}
-        onClosePopup={handleClosePopup}
-        onUpdateAvatar={handleUpdateAvatar}
-        popup={popup}
-        cards={cards}
-        onCardLike={handleCardLike}
-        onCardDelete={handleCardDelete}
-        onCardSubmit={handleAddPlaceSubmit}
+return (
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute isLoggedIn={true}>
+            <div className="page__content">
+              <CurrentUserContext.Provider value={{ currentUser, handleUpdateUser }}>
+                <Header />
+                <Main
+                  onOpenPopup={handleOpenPopup}
+                  onClosePopup={handleClosePopup}
+                  onUpdateAvatar={handleUpdateAvatar}
+                  popup={popup}
+                  cards={cards}
+                  onCardLike={handleCardLike}
+                  onCardDelete={handleCardDelete}
+                  onCardSubmit={handleAddPlaceSubmit}
+                />
+              </CurrentUserContext.Provider>
+            </div>
+          </ProtectedRoute>
+        }
       />
-      </ProtectedRoute>
-      </CurrentUserContext.Provider>
-    </div>
-
-  )
+    </Routes>
+  );
 }
 
 export default App
