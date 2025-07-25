@@ -1,17 +1,27 @@
 import { useState, useRef, useEffect } from 'react';
 import Header from "../Header/Header";
 import formValidator from '../../utils/FormValidator';
+import InfoTooltipSucess from '../InfoTooltip/InfoTooltipSucess';
 
-function Login() {
+function Login({ handleOpenPopup }) {  // ✅ Recibe la prop
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const emailRef = useRef();
   const passwordRef = useRef();
   const formRef = useRef();
 
+  // ✅ Crear el objeto popup para el tooltip de éxito
+  const successPopup = { 
+    title: "", 
+    children: <InfoTooltipSucess /> 
+  };
+
   function handleSubmit(e) {
     e.preventDefault();
     console.log(email, password);
+    
+    // ✅ Abrir el popup al hacer submit
+    handleOpenPopup(successPopup);
   }
 
   useEffect(() => {

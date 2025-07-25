@@ -89,7 +89,16 @@ function App() {
 return (
   <>
     <Routes>
-      <Route path="/login" element={<Login handleOpenPopup={handleOpenPopup} />} />
+      <Route path="/login" element={
+        <>
+          <Login handleOpenPopup={handleOpenPopup} />
+          {popup && (
+            <Popup onClose={handleClosePopup} title={popup.title}>
+              {popup.children}
+            </Popup>
+          )}
+        </>
+      } />
       <Route path="/signup" element={<Signup />} />
 
       <Route
