@@ -5,7 +5,7 @@ export default function Popup(props) {
     return (
         <div className="popup">
           <div
-            className={title ? "popup__content" : "element__modal"}
+            className={"popup__content"}
           >
             <button className="popup__close_button" onClick={onClose}>
               <img

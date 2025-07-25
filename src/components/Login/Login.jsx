@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import Header from "../Header/Header";
 import formValidator from '../../utils/FormValidator';
 import InfoTooltipSucess from '../InfoTooltip/InfoTooltipSucess';
+import InfoTooltipFail from '../InfoTooltip/InfoTooltipFail';
 
 function Login({ handleOpenPopup }) {  // ✅ Recibe la prop
   const [email, setEmail] = useState('');
@@ -11,17 +12,26 @@ function Login({ handleOpenPopup }) {  // ✅ Recibe la prop
   const formRef = useRef();
 
   // ✅ Crear el objeto popup para el tooltip de éxito
-  const successPopup = { 
-    title: "", 
-    children: <InfoTooltipSucess /> 
+  const successPopup = {
+    title: "",
+    children: <InfoTooltipSucess />
   };
+
+  const failPopup = {
+    title: "",
+    children: <InfoTooltipFail />
+  }
 
   function handleSubmit(e) {
     e.preventDefault();
     console.log(email, password);
-    
-    // ✅ Abrir el popup al hacer submit
+
     handleOpenPopup(successPopup);
+  }
+
+  function testFail(e) {
+    e.preventDefault();
+    handleOpenPopup(failPopup);
   }
 
   useEffect(() => {
@@ -65,6 +75,7 @@ function Login({ handleOpenPopup }) {  // ✅ Recibe la prop
         <span className="form__input-error" id="password-error"></span>
         <button type="submit" className="profile__edit-form-button login_submit">Inicia sesión</button>
       </form>
+      <button onClick={testFail} >Test fail</button>
       <button className="signup_button">¿Aún no eres miembro? Regístrate aquí</button>
     </div>
   );

@@ -1,6 +1,18 @@
-p{
-  color: white;
+.info-content{
+  display: flex;
+ flex-direction: column;
+ text-align: center;
+ padding: 60px;
 }
-.info-panel{
-  color: white;
+
+.info-image{
+  max-width: 120px;
+  align-self: center;
+}
+
+.info-text{
+  font-weight: 900;
+  font-size: 24px;
+  max-width: 358px;
+  align-self: center;
 }
