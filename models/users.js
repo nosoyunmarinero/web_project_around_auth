@@ -22,7 +22,11 @@ const userSchema = new mongoose.Schema({
       message: props => `${props.value} no es una direccion URL válida`
     },
     required: [true, 'Se requiere una URL válida']
-  }
+  },
+  email: {
+  type: String,
+  required: true,
+}
 });
 
 module.exports = mongoose.model('user', userSchema);

@@ -15,10 +15,10 @@ export default function EditAvatar({onUpdateAvatar}) {
     e.preventDefault();
 
     onUpdateAvatar({
-      avatarURL: avatarRef.current.value
+      avatar: inputRef.current.value
     });
   }
-  
+
   return (
     <form className="profile__edit-form" id="avatar-form" ref={formRef} noValidate onSubmit={handleSubmit}>
       <input

@@ -1,22 +1,25 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors'); // ← Instalar: npm install cors
 const app = express();
 
-// Base de datos
 mongoose.connect("mongodb://localhost:27017/aroundb");
+
+// Configurar CORS ANTES de otros middlewares
+app.use(cors({
+  origin: 'http://localhost:5000', // Tu frontend
+  credentials: true
+}));
 
 app.use(express.json());
 
-//Middleware
+// Middleware global
 app.use((req, res, next) => {
-  req.user = {
-    _id: '68632b97f447f5780627fee1'
-  };
-
+  req.user = { _id: '68632b97f447f5780627fee1' };
   next();
 });
 
-// Rutas
+// Importar routers
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 
@@ -30,7 +33,3 @@ app.use((req, res) => {
 app.listen(3000, () => {
   console.log('Servidor iniciado en el puerto 3000');
 });
-
-
-
-

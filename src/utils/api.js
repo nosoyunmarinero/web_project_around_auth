@@ -2,16 +2,20 @@ class Api {
     constructor(options) {
       this._options = options;
     }
-  
+
     getInitialCards() {
       return fetch(`${this._options.baseUrl}/cards`, {
         headers: {
           authorization: this._options.headers.authorization,
         },
       })
-        .then((res) => res.json())
+        .then((res) => {
+          if (!res.ok) throw new Error(`Error: ${res.status}`);
+          return res.json();
+        })
+        .then((data) => data.data) // ← Extraer data.data
     }
-  
+
     addNewCard(newCardData) {
       return fetch(`${this._options.baseUrl}/cards`, {
         method: "POST",
@@ -21,10 +25,11 @@ class Api {
           link: newCardData.link,
         }),
       }).then((res) => {
+        if (!res.ok) throw new Error(`Error: ${res.status}`);
         return res.json();
-      });
+      }).then((data) => data.data); // ← Extraer data.data
     }
-  
+
     getUserInfo() {
       return fetch(`${this._options.baseUrl}/users/me`, {
         headers: {
@@ -33,9 +38,15 @@ class Api {
       }).then((res) => {
         if (!res.ok) throw new Error(`Error: ${res.status}`);
         return res.json();
+      }).then((data) => {
+        console.log('API getUserInfo response:', data); // ← Debug
+        return data.data; // ← Extraer data.data - AQUÍ ESTÁ LA CLAVE
+      }).catch(err => {
+        console.error('Error al obtener información del usuario:', err);
+        throw err; // ← Relanzar error en lugar de retornar {}
       });
     }
-  
+
     setUserInfo(newUserData) {
       return fetch(`${this._options.baseUrl}/users/me`, {
         method: "PATCH",
@@ -48,10 +59,13 @@ class Api {
           about: newUserData.about,
         }),
       })
-        .then((res) => res.json())
-        .finally(() => {});
+        .then((res) => {
+          if (!res.ok) throw new Error(`Error: ${res.status}`);
+          return res.json();
+        })
+        .then((data) => data.data) // ← Extraer data.data
     }
-  
+
     setAvatar(newAvatarData) {
       return fetch(`${this._options.baseUrl}/users/me/avatar`, {
         method: "PATCH",
@@ -60,12 +74,16 @@ class Api {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          avatar: newAvatarData.avatarURL,
+          avatar: newAvatarData.avatar, // ← Corregido: era avatarURL
         }),
       })
-        .then((res) => res.json())
+        .then((res) => {
+          if (!res.ok) throw new Error(`Error: ${res.status}`);
+          return res.json();
+        })
+        .then((data) => data.data) // ← Extraer data.data
     }
-  
+
     deleteCard(clickedButtonID) {
       return fetch(`${this._options.baseUrl}/cards/${clickedButtonID}`, {
         method: "DELETE",
@@ -73,14 +91,16 @@ class Api {
           authorization: this._options.headers.authorization,
         },
       })
-        .then((res) => res.json())
+        .then((res) => {
+          if (!res.ok) throw new Error(`Error: ${res.status}`);
+          return res.json();
+        })
         .then(() => {
-  
           console.log("Tarjeta eliminada", clickedButtonID);
         })
         .catch((err) => console.log("Error al eliminar la tarjeta:", err));
     }
-  
+
     changeLikeCardStatus(clickedButtonID, isLiked) {
       const method = isLiked ? "PUT" : "DELETE";
       const body = isLiked ? JSON.stringify({ isLiked: true }) : null;
@@ -91,11 +111,13 @@ class Api {
           "Content-Type": "application/json",
         },
         body,
-      }).then((res) => res.json());
-    } 
-  
+      }).then((res) => {
+        if (!res.ok) throw new Error(`Error: ${res.status}`);
+        return res.json();
+      }).then((data) => data.data); // ← Extraer data.data
+    }
+
     //Funciones de carga
-  
     renderTextLoading(isLoading, saveButtonElement) {
       if (isLoading) {
         saveButtonElement.textContent = "Guardando...";
@@ -106,11 +128,11 @@ class Api {
   }
 
   const api = new Api({
-    baseUrl: "https://around-api.es.tripleten-services.com/v1",
-  headers: {
-    authorization: "f8e114e3-b34d-4d8e-aa7c-184290d06607",
-    "Content-Type": "application/json",
-  },
+    baseUrl: "http://localhost:3000", // ← Cambiar a tu backend local
+    headers: {
+      authorization: "f8e114e3-b34d-4d8e-aa7c-184290d06607",
+      "Content-Type": "application/json",
+    },
   })
-  
+
   export default api;

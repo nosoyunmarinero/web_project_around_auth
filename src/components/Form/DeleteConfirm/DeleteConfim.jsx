@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import CurrentUserContext from "../../../contexts/CurrentUserContext.js"
+import {CurrentUserContext} from "../../../contexts/CurrentUserContext.jsx"
 
 export default function DeleteConfirm({ cardId, onCardDelete}) {
     const {currentUser} = useContext(CurrentUserContext);
@@ -7,7 +7,7 @@ export default function DeleteConfirm({ cardId, onCardDelete}) {
     const handleDelete = () => {
         onCardDelete(cardId);
     }
-    
+
   return (
     <div>
           <header className="profile__edit-form-header"></header>

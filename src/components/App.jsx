@@ -1,11 +1,10 @@
-import { useState,useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Routes, Route } from "react-router-dom";
-
 
 import api from "../utils/api.js";
 import Header from "./Header/Header.jsx";
 import Main from "./Main/Main.jsx";
-import CurrentUserContext from '../contexts/CurrentUserContext.js';
+import { CurrentUserProvider } from '../contexts/CurrentUserContext.jsx'; // ← Cambio importante
 import ProtectedRoute from './ProtectedRoute/ProtectedRoute.jsx';
 import Login from "./Login/Login.jsx"
 import Signup from "./Register/Register.jsx"
@@ -13,17 +12,13 @@ import InfoTooltipSucess from './InfoTooltip/InfoTooltipSucess.jsx';
 import InfoTooltipFail from './InfoTooltip/InfoTooltipFail.jsx';
 import Popup from './Main/Popup/Popup.jsx';
 
-
 function App() {
-  const [currentUser, setCurrentUser] = useState({});
+  // ❌ ELIMINADO: const [currentUser, setCurrentUser] = useState({});
   const [popup, setPopup] = useState(null);
   const [cards, setCards] = useState([]);
 
-  useEffect(() => {
-    api.getUserInfo().then((data) => {
-      setCurrentUser(data);
-    });
-  }, []);
+  // ❌ ELIMINADO: useEffect que obtenía userData y llamaba setCurrentUser
+  // El CurrentUserProvider ahora maneja esto
 
   useEffect(() => {
     api.getInitialCards().then((data) => {
@@ -40,7 +35,8 @@ function App() {
     })();
   }
 
-  const handleUpdateUser = (data) => {
+  // ✅ MODIFICADO: Ahora recibe currentUser como parámetro
+  const handleUpdateUser = (data, currentUser, setCurrentUser) => {
     (async () => {
       await api.setUserInfo(data).then((newData) => {
         setCurrentUser(newData);
@@ -49,7 +45,8 @@ function App() {
     })();
   };
 
-  const handleUpdateAvatar = (data) => {
+  // ✅ MODIFICADO: Ahora recibe currentUser como parámetro
+  const handleUpdateAvatar = (data, currentUser, setCurrentUser) => {
     (async () => {
       await api.setAvatar(data).then((newData) => {
         setCurrentUser(newData);
@@ -69,7 +66,6 @@ function App() {
   async function handleCardLike(card) {
     const isLiked = card.isLiked;
 
-    // Envía una solicitud a la API y obtén los datos actualizados de la tarjeta
     await api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
         setCards((state) =>
            state.map((currentCard) =>
@@ -77,55 +73,55 @@ function App() {
     }).catch((error) => console.error(error));
   }
 
-
   async function handleCardDelete(cardId) {
-  await api.deleteCard(cardId).then(() => {
-    setCards((state) => state.filter((currentCard) => currentCard._id !== cardId));
-    handleClosePopup();
-  })
+    await api.deleteCard(cardId).then(() => {
+      setCards((state) => state.filter((currentCard) => currentCard._id !== cardId));
+      handleClosePopup();
+    })
   }
 
+  return (
+    <>
+      <Routes>
+        <Route path="/login" element={
+          <>
+            <Login handleOpenPopup={handleOpenPopup} />
+            {popup && (
+              <Popup onClose={handleClosePopup} title={popup.title}>
+                {popup.children}
+              </Popup>
+            )}
+          </>
+        } />
+        <Route path="/signup" element={<Signup />} />
 
-return (
-  <>
-    <Routes>
-      <Route path="/login" element={
-        <>
-          <Login handleOpenPopup={handleOpenPopup} />
-          {popup && (
-            <Popup onClose={handleClosePopup} title={popup.title}>
-              {popup.children}
-            </Popup>
-          )}
-        </>
-      } />
-      <Route path="/signup" element={<Signup />} />
-
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute isLoggedIn={true}>
-            <div className="page__content">
-              <CurrentUserContext.Provider value={{ currentUser, handleUpdateUser }}>
-                <Header />
-                <Main
-                  onOpenPopup={handleOpenPopup}
-                  onClosePopup={handleClosePopup}
-                  onUpdateAvatar={handleUpdateAvatar}
-                  popup={popup}
-                  cards={cards}
-                  onCardLike={handleCardLike}
-                  onCardDelete={handleCardDelete}
-                  onCardSubmit={handleAddPlaceSubmit}
-                />
-              </CurrentUserContext.Provider>
-            </div>
-          </ProtectedRoute>
-        }
-      />
-    </Routes>
-  </>
-);
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute isLoggedIn={true}>
+              <div className="page__content">
+                {/* ✅ CAMBIO PRINCIPAL: Usar CurrentUserProvider en lugar del Context.Provider manual */}
+                <CurrentUserProvider>
+                  <Header />
+                  <Main
+                    onOpenPopup={handleOpenPopup}
+                    onClosePopup={handleClosePopup}
+                    onUpdateAvatar={handleUpdateAvatar}
+                    onUpdateUser={handleUpdateUser}
+                    popup={popup}
+                    cards={cards}
+                    onCardLike={handleCardLike}
+                    onCardDelete={handleCardDelete}
+                    onCardSubmit={handleAddPlaceSubmit}
+                  />
+                </CurrentUserProvider>
+              </div>
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </>
+  );
 }
 
 export default App

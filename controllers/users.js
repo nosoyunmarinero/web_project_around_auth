@@ -45,10 +45,10 @@ module.exports.createUser = (req, res) => {
 
 //PATCH User/me
 module.exports.updateProfile = (req, res) => {
-  const {name, about} = req.body;
+  const {name, about, email} = req.body;
   Users.findByIdAndUpdate(
     req.user._id,
-    {name, about},
+    {name, about, email},
     {new: true, runValidators: true}
   )
     .then(user => {
@@ -81,3 +81,32 @@ module.exports.updateAvatar = (req, res) => {
       }
     })
 }
+
+//GET current user
+module.exports.getCurrentUser = (req, res) => {
+  Users.findById(req.user._id)
+    .orFail(() => {
+      const error = new Error('NOT_FOUND');
+      error.statusCode = NOT_FOUND;
+      throw error;
+    })
+    .then((user) => {
+      res.send({ data: user });
+    })
+    .catch(err => {
+      if (err.statusCode === 404) {
+        return res.status(NOT_FOUND).send({ message: 'Usuario no encontrado' });
+      }
+      res.status(SERVER_ERROR).send({ message: 'Error en el servidor' });
+    });
+};
+
+//BORAR USUARIO (TEST TOOL)
+module.exports.deleteUser = (req, res) => {
+  Users.findByIdAndDelete(req.params.id)
+    .then(user => {
+      if (!user) return res.status(NOT_FOUND).send({ message: 'Usuario no encontrado' });
+      res.send({ message: 'Usuario eliminado' });
+    })
+    .catch(() => res.status(SERVER_ERROR).send({ message: 'Error del servidor' }));
+};
