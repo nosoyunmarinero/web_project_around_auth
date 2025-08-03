@@ -19,8 +19,12 @@ function Header({ children }) {
             className="header__logo"
           />
           {currentUser?.email && (
+            <div>
             <span className="header_email">{currentUser.email}</span>
+            <button className="header_signout">Cerrar sesión</button>
+            </div>
           )}
+
           {children}
         </>
       ) : (
@@ -30,6 +34,7 @@ function Header({ children }) {
             alt="Logo Around the U.S."
             className="header__logo"
           />
+          <button className="header_signig">Registrate</button>
           {children}
         </>
       )}

@@ -22,7 +22,7 @@ const {name, link} = req.body;
 
 //Delete (DELETE)
 module.exports.deleteCard = (req, res) => {
-  Card.findByIdAndDelete(req.params.id)
+  Card.findByIdAndDelete(req.params.cardId)
     .orFail(new Error('NOT_FOUND'))
     .then(card => {
      res.send({ data: card, message: 'Card eliminada con exito' });

@@ -19,7 +19,7 @@ export default function Main({popup, onOpenPopup, onClosePopup, onUpdateAvatar, 
 
   const newCardPopup = { title: "Nuevo lugar", children: <NewCard onCardSubmit={onCardSubmit}/> };
   const avatarPopup = { title: "Editar avatar", children: <EditAvatar onUpdateAvatar={onUpdateAvatar}/> };
-  const editProfilePopup = { title: "Editar perfil", children: <EditProfile /> };
+  const editProfilePopup = { title: "Editar perfil", children: <EditProfile onClosePopup={onClosePopup} /> };
 
 
 

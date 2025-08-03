@@ -1,7 +1,9 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useContext } from 'react';
 import formValidator from '../../../utils/FormValidator';
+import { CurrentUserContext } from '../../../contexts/CurrentUserContext.jsx';
 
 export default function EditAvatar({onUpdateAvatar}) {
+  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   const inputRef = useRef();
   const formRef = useRef();
 
@@ -14,9 +16,13 @@ export default function EditAvatar({onUpdateAvatar}) {
   function handleSubmit(e) {
     e.preventDefault();
 
-    onUpdateAvatar({
-      avatar: inputRef.current.value
-    });
+    onUpdateAvatar(
+      {
+        avatar: inputRef.current.value
+      },
+      currentUser,
+      setCurrentUser
+    );
   }
 
   return (

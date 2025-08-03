@@ -17,6 +17,30 @@
 
 .header_email{
   color: white;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+}
+.header_signout{
+    color: white;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    opacity: .7;
+    margin-left: 23px;
+}
+.header_signout:hover{
+  opacity: 1;
+}
+
+.header_signig{
+    color: white;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+}
+.header_signig:hover{
+  opacity: .7;
 }
 
 @media screen and (max-width: 880px) {

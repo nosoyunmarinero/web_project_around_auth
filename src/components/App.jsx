@@ -4,7 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import api from "../utils/api.js";
 import Header from "./Header/Header.jsx";
 import Main from "./Main/Main.jsx";
-import { CurrentUserProvider } from '../contexts/CurrentUserContext.jsx'; // ← Cambio importante
+import { CurrentUserProvider } from '../contexts/CurrentUserContext.jsx';
 import ProtectedRoute from './ProtectedRoute/ProtectedRoute.jsx';
 import Login from "./Login/Login.jsx"
 import Signup from "./Register/Register.jsx"
@@ -13,12 +13,10 @@ import InfoTooltipFail from './InfoTooltip/InfoTooltipFail.jsx';
 import Popup from './Main/Popup/Popup.jsx';
 
 function App() {
-  // ❌ ELIMINADO: const [currentUser, setCurrentUser] = useState({});
+
   const [popup, setPopup] = useState(null);
   const [cards, setCards] = useState([]);
 
-  // ❌ ELIMINADO: useEffect que obtenía userData y llamaba setCurrentUser
-  // El CurrentUserProvider ahora maneja esto
 
   useEffect(() => {
     api.getInitialCards().then((data) => {
@@ -35,7 +33,6 @@ function App() {
     })();
   }
 
-  // ✅ MODIFICADO: Ahora recibe currentUser como parámetro
   const handleUpdateUser = (data, currentUser, setCurrentUser) => {
     (async () => {
       await api.setUserInfo(data).then((newData) => {
@@ -45,7 +42,6 @@ function App() {
     })();
   };
 
-  // ✅ MODIFICADO: Ahora recibe currentUser como parámetro
   const handleUpdateAvatar = (data, currentUser, setCurrentUser) => {
     (async () => {
       await api.setAvatar(data).then((newData) => {

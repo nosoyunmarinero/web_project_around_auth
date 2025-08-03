@@ -74,14 +74,14 @@ class Api {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          avatar: newAvatarData.avatar, // ← Corregido: era avatarURL
+          link: newAvatarData.avatar // Cambiado de avatar a link
         }),
       })
         .then((res) => {
           if (!res.ok) throw new Error(`Error: ${res.status}`);
           return res.json();
         })
-        .then((data) => data.data) // ← Extraer data.data
+        .then((data) => data.data)
     }
 
     deleteCard(clickedButtonID) {
