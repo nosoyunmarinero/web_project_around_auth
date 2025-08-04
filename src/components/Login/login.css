@@ -1,4 +1,4 @@
-button:hover{
+a:hover{
 opacity: .7;
 cursor: pointer;
 }
@@ -11,6 +11,8 @@ cursor: pointer;
 }
 
 .signup_header__button{
+   all: unset;
+   cursor: pointer;;
   background: none;
   color: white;
   border: none;

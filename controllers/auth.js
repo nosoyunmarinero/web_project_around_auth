@@ -20,7 +20,7 @@ module.exports.login = (req, res) => {
     .then((user) => {
       // Crear token
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' });
-      
+
       // Enviar token
       res.send({ token });
     })
@@ -34,7 +34,7 @@ module.exports.createUser = (req, res) => {
   const { name, about, avatar, email, password } = req.body;
 
   // Verificar si el usuario ya existe
-  User.findOne({ email })
+  User.findOne({email})
     .then((user) => {
       if (user) {
         return res.status(CONFLICT).send({ message: 'El usuario ya existe' });

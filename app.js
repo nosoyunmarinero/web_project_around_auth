@@ -22,7 +22,10 @@ app.use((req, res, next) => {
 // Importar routers
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
+const authRouter = require('./routes/auth');
 
+// Usar routers
+app.use('/auth', authRouter);
 app.use('/users', usersRouter);
 app.use('/cards', cardsRouter);
 

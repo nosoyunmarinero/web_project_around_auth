@@ -34,7 +34,6 @@ function Header({ children }) {
             alt="Logo Around the U.S."
             className="header__logo"
           />
-          <button className="header_signig">Registrate</button>
           {children}
         </>
       )}

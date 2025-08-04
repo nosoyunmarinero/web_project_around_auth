@@ -1,32 +1,27 @@
 import { useState, useRef, useEffect } from 'react';
 import Header from "../Header/Header";
 import formValidator from '../../utils/FormValidator';
-import InfoTooltipSucess from '../InfoTooltip/InfoTooltipSucess';
-import InfoTooltipFail from '../InfoTooltip/InfoTooltipFail';
+import InfoTooltip from '../InfoTooltip/InfoTooltip';
 
-function Login({ handleOpenPopup }) {  // ✅ Recibe la prop
+function Login({ handleOpenPopup }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const emailRef = useRef();
   const passwordRef = useRef();
   const formRef = useRef();
 
-  // ✅ Crear el objeto popup para el tooltip de éxito
-  const successPopup = {
-    title: "",
-    children: <InfoTooltipSucess />
-  };
 
-  const failPopup = {
-    title: "",
-    children: <InfoTooltipFail />
-  }
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(email, password);
 
-    handleOpenPopup(successPopup);
+    registerUser({ email, password })
+      .then(() => {
+        setInfoTooltip({ isOpen: true, success: true }); // mostrar éxito
+      })
+      .catch(() => {
+        setInfoTooltip({ isOpen: true, success: false }); // mostrar error
+      });
   }
 
   function testFail(e) {
@@ -43,7 +38,7 @@ function Login({ handleOpenPopup }) {  // ✅ Recibe la prop
   return (
     <div className="login">
       <Header>
-        <button className="signup_header__button">Regístrate</button>
+        <a href='/signup' className="signup_header__button">Regístrate</a>
       </Header>
       <h1 className="login_header">
         Inicia sessión

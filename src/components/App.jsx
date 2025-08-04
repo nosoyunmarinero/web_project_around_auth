@@ -8,8 +8,7 @@ import { CurrentUserProvider } from '../contexts/CurrentUserContext.jsx';
 import ProtectedRoute from './ProtectedRoute/ProtectedRoute.jsx';
 import Login from "./Login/Login.jsx"
 import Signup from "./Register/Register.jsx"
-import InfoTooltipSucess from './InfoTooltip/InfoTooltipSucess.jsx';
-import InfoTooltipFail from './InfoTooltip/InfoTooltipFail.jsx';
+import InfoTooltip from './InfoTooltip/InfoTooltip';
 import Popup from './Main/Popup/Popup.jsx';
 
 function App() {

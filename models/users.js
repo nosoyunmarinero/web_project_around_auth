@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
   },
   about: {
     type: String,
-    require: true,
+    required: true,
     minlength: 2,
     maxlength: 30
   },
@@ -26,7 +26,15 @@ const userSchema = new mongoose.Schema({
   email: {
   type: String,
   required: true,
-}
+  unique: true,
+  lowercase: true
+},
+  password: {
+    type: String,
+    required: true,
+    select: false,
+    minlength: 8,
+  }
 });
 
 module.exports = mongoose.model('user', userSchema);

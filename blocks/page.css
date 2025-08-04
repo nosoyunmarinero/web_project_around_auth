@@ -3,6 +3,9 @@ body {
   background-color: black;
 }
 
+button {
+  cursor: pointer;
+}
 .page {
   margin: 0;
   display: flex;
