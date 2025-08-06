@@ -112,6 +112,7 @@ module.exports.getCurrentUser = (req, res) => {
       throw error;
     })
     .then((user) => {
+      // Asegurar formato consistente
       res.send({ data: user });
     })
     .catch(err => {

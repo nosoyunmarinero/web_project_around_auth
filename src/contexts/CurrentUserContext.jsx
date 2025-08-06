@@ -11,6 +11,12 @@ export const CurrentUserProvider = ({children}) => {
       setIsLoading(true);
       const token = localStorage.getItem('token');
       
+      if (!token) {
+        setIsLoading(false);
+        setCurrentUser(null);
+        return;
+      }
+
       const response = await fetch('http://localhost:3000/users/me', {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -18,26 +24,27 @@ export const CurrentUserProvider = ({children}) => {
       });
 
       if (!response.ok) {
+        if (response.status === 401) {
+          // Token inválido o expirado
+          localStorage.removeItem('token');
+        }
         throw new Error('Error al obtener usuario actual');
       }
 
       const data = await response.json();
-      setCurrentUser(data.data);
+      // Manejar ambos formatos de respuesta
+      setCurrentUser(data.data || data);
     } catch (error) {
       console.error('Error al cargar usuario:', error);
       setCurrentUser(null);
+      localStorage.removeItem('token');
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      getCurrentUser();
-    } else {
-      setIsLoading(false);
-    }
+    getCurrentUser();
   }, []);
 
   return (
