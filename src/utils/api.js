@@ -3,6 +3,10 @@ class Api {
       this._options = options;
     }
 
+    updateToken(token) {
+      this._options.headers.authorization = `Bearer ${token}`;
+    }
+
     getInitialCards() {
       return fetch(`${this._options.baseUrl}/cards`, {
         headers: {
@@ -13,7 +17,20 @@ class Api {
           if (!res.ok) throw new Error(`Error: ${res.status}`);
           return res.json();
         })
-        .then((data) => data.data) // ← Extraer data.data
+        .then((data) => data.data)
+    }
+
+    getInitialCards() {
+      return fetch(`${this._options.baseUrl}/cards`, {
+        headers: {
+          authorization: this._options.headers.authorization,
+        },
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error(`Error: ${res.status}`);
+          return res.json();
+        })
+        .then((data) => data.data)
     }
 
     addNewCard(newCardData) {
@@ -27,7 +44,7 @@ class Api {
       }).then((res) => {
         if (!res.ok) throw new Error(`Error: ${res.status}`);
         return res.json();
-      }).then((data) => data.data); // ← Extraer data.data
+      }).then((data) => data.data);
     }
 
     getUserInfo() {
@@ -128,9 +145,9 @@ class Api {
   }
 
   const api = new Api({
-    baseUrl: "http://localhost:3000", // ← Cambiar a tu backend local
+    baseUrl: "http://localhost:3000", // Cambiar de la URL externa a localhost
     headers: {
-      authorization: "f8e114e3-b34d-4d8e-aa7c-184290d06607",
+      authorization: '',
       "Content-Type": "application/json",
     },
   })

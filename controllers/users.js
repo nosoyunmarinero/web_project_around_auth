@@ -31,17 +31,38 @@ module.exports.getUserById = (req, res) => {
 
 //Create User
 module.exports.createUser = (req, res) => {
-  const {name, about, avatar} = req.body;
+  console.log('Body recibido:', req.body);
+  const {name, about, avatar, email, password} = req.body;
 
-  Users.create({name, about, avatar})
-  .then(user => res.status(201).send({data: user}))
-  .catch(err =>{
-    console.log(err.name)
+  // Verificar si falta la contraseña
+  if (!password) {
+    return res.status(400).send({message: 'La contraseña es requerida'});
+  }
 
-    return err.name === "ValidationError"
-    ? res.status(BAD_REQUEST).send({message: 'Datos no validos'})
-    : res.status(SERVER_ERROR).send({message: 'Se producio un Error interno :c'})})
-}
+  // Hashear la contraseña antes de guardar
+  const bcrypt = require('bcryptjs');
+  bcrypt.hash(password, 10)
+    .then(hash => {
+      return Users.create({name, about, avatar, email, password: hash});
+    })
+    .then(user => {
+      const userResponse = user.toObject();
+      delete userResponse.password;
+      res.status(201).send({data: userResponse});
+    })
+    .catch(err =>{
+      console.log('Error completo:', err.message);
+      console.log('Errores de validación:', err.errors);
+      
+      if(err.name === "ValidationError"){
+        return res.status(400).send({message: 'Datos no válidos'});
+      }
+      if(err.code === 11000){
+        return res.status(409).send({message: 'El email ya está registrado'});
+      }
+      res.status(500).send({message: 'Error del servidor'});
+    });
+};
 
 //PATCH User/me
 module.exports.updateProfile = (req, res) => {

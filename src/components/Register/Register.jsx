@@ -1,21 +1,17 @@
 import { useState } from 'react';
 import Header from "../Header/Header";
-import { registerUser } from '../../utils/auth';
 import InfoTooltip from '../InfoTooltip/InfoTooltip';
-//import formValidator from '../../utils/FormValidator';
 
-
-
-function Register() {
+function Register({ onRegister }) { // ← Cambiar OnRegister por onRegister
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [infoTooltip, setInfoTooltip] = useState({ isOpen: false, success: false });
-;
 
-function handleSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault();
 
-    registerUser({ email, password })
+    // Usar la función que viene del App.jsx
+    onRegister(email, password)
       .then(() => {
         setInfoTooltip({ isOpen: true, success: true }); // mostrar éxito
       })
@@ -24,21 +20,17 @@ function handleSubmit(e) {
       });
   }
 
-
-
-
- return (
+  return (
     <div className="login">
       <Header>
         <a href="/login" className="signup_header__button">Iniciar Sesión</a>
       </Header>
-
       <h1 className="login_header">Regístrate</h1>
-
       <form className="login_form" onSubmit={handleSubmit} id="login-form" noValidate>
         <input
           type="email"
           id="email"
+          value={email} // ← Agregar value
           onChange={(e) => setEmail(e.target.value)}
           className="profile__edit-form-input login_input"
           placeholder="Correo electrónico"
@@ -47,10 +39,10 @@ function handleSubmit(e) {
           required
         />
         <span className="form__input-error" id="email-error"></span>
-
         <input
           type="password"
           id="password"
+          value={password} // ← Agregar value
           onChange={(e) => setPassword(e.target.value)}
           className="profile__edit-form-input login_input"
           placeholder="Contraseña"
@@ -59,17 +51,13 @@ function handleSubmit(e) {
           required
         />
         <span className="form__input-error" id="password-error"></span>
-
         <button type="submit" className="login_submit">Regístrate</button>
       </form>
+      <a href="/login" className="signup_button">¿Ya eres miembro? Inicia sesión aquí</a>
 
-      <button className="signup_button">¿Ya eres miembro? Inicia sesión aquí</button>
-
-      {
-        infoTooltip.isOpen && (
-          <InfoTooltip isSuccess={infoTooltip.success} />
-        )
-      }
+      {infoTooltip.isOpen && (
+        <InfoTooltip isSuccess={infoTooltip.success} />
+      )}
     </div>
   );
 }

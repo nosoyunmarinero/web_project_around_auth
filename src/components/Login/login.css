@@ -38,6 +38,7 @@ cursor: pointer;
 }
 
 .login_input {
+  color: white;
   background: transparent;
   border: none;
   border-bottom: 1px solid #ccc;
@@ -63,6 +64,10 @@ cursor: pointer;
 }
 
 .signup_button{
+  all: unset;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
   margin-top: 15px;
   color: white;
   background: none;

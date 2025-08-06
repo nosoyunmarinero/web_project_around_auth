@@ -3,7 +3,7 @@ import Header from "../Header/Header";
 import formValidator from '../../utils/FormValidator';
 import InfoTooltip from '../InfoTooltip/InfoTooltip';
 
-function Login({ handleOpenPopup }) {
+function Login({ onLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const emailRef = useRef();
@@ -15,19 +15,14 @@ function Login({ handleOpenPopup }) {
   function handleSubmit(e) {
     e.preventDefault();
 
-    registerUser({ email, password })
-      .then(() => {
-        setInfoTooltip({ isOpen: true, success: true }); // mostrar éxito
-      })
-      .catch(() => {
-        setInfoTooltip({ isOpen: true, success: false }); // mostrar error
-      });
+    // Obtener email y password del form
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+
+    // Usar la función que viene del App.jsx
+    onLogin(email, password);
   }
 
-  function testFail(e) {
-    e.preventDefault();
-    handleOpenPopup(failPopup);
-  }
 
   useEffect(() => {
     if (formRef.current) {
@@ -38,7 +33,7 @@ function Login({ handleOpenPopup }) {
   return (
     <div className="login">
       <Header>
-        <a href='/signup' className="signup_header__button">Regístrate</a>
+        <a href='/signin' className="signup_header__button">Regístrate</a>
       </Header>
       <h1 className="login_header">
         Inicia sessión
@@ -70,8 +65,7 @@ function Login({ handleOpenPopup }) {
         <span className="form__input-error" id="password-error"></span>
         <button type="submit" className="profile__edit-form-button login_submit">Inicia sesión</button>
       </form>
-      <button onClick={testFail} >Test fail</button>
-      <button className="signup_button">¿Aún no eres miembro? Regístrate aquí</button>
+      <a href='/signin' className="signup_button">¿Aún no eres miembro? Regístrate aquí</a>
     </div>
   );
 }
