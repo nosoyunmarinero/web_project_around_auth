@@ -20,19 +20,6 @@ class Api {
         .then((data) => data.data)
     }
 
-    getInitialCards() {
-      return fetch(`${this._options.baseUrl}/cards`, {
-        headers: {
-          authorization: this._options.headers.authorization,
-        },
-      })
-        .then((res) => {
-          if (!res.ok) throw new Error(`Error: ${res.status}`);
-          return res.json();
-        })
-        .then((data) => data.data)
-    }
-
     addNewCard(newCardData) {
       return fetch(`${this._options.baseUrl}/cards`, {
         method: "POST",
@@ -56,11 +43,11 @@ class Api {
         if (!res.ok) throw new Error(`Error: ${res.status}`);
         return res.json();
       }).then((data) => {
-        console.log('API getUserInfo response:', data); // ← Debug
-        return data.data; // ← Extraer data.data - AQUÍ ESTÁ LA CLAVE
+        console.log('API getUserInfo response:', data);
+        return data.data;
       }).catch(err => {
         console.error('Error al obtener información del usuario:', err);
-        throw err; // ← Relanzar error en lugar de retornar {}
+        throw err;
       });
     }
 
@@ -80,7 +67,7 @@ class Api {
           if (!res.ok) throw new Error(`Error: ${res.status}`);
           return res.json();
         })
-        .then((data) => data.data) // ← Extraer data.data
+        .then((data) => data.data)
     }
 
     setAvatar(newAvatarData) {
@@ -91,7 +78,7 @@ class Api {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          link: newAvatarData.avatar // Cambiado de avatar a link
+          link: newAvatarData.avatar
         }),
       })
         .then((res) => {
@@ -131,10 +118,9 @@ class Api {
       }).then((res) => {
         if (!res.ok) throw new Error(`Error: ${res.status}`);
         return res.json();
-      }).then((data) => data.data); // ← Extraer data.data
+      }).then((data) => data.data);
     }
 
-    //Funciones de carga
     renderTextLoading(isLoading, saveButtonElement) {
       if (isLoading) {
         saveButtonElement.textContent = "Guardando...";
@@ -144,12 +130,18 @@ class Api {
     }
   }
 
+  // AQUÍ ESTÁ EL CAMBIO PRINCIPAL:
   const api = new Api({
-    baseUrl: "http://localhost:3000", // Cambiar de la URL externa a localhost
+    baseUrl: "http://localhost:3000",
     headers: {
-      authorization: '',
       "Content-Type": "application/json",
     },
   })
+
+  // Establecer el token si existe al inicializar
+  const savedToken = localStorage.getItem('token');
+  if (savedToken) {
+    api.updateToken(savedToken);
+  }
 
   export default api;

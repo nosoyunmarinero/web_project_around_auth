@@ -30,14 +30,15 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (isLoggedIn && token) {
-      api.getInitialCards().then((data) => {
-        setCards(data);
-      }).catch(err => {
-        console.error('Error al cargar cards:', err);
-      });
-    }
-  }, [isLoggedIn, token]);
+  if (isLoggedIn && token) {
+    api.getInitialCards().then((data) => {
+      setCards(data || []); // ← Si no hay data, array vacío
+    }).catch(err => {
+      console.log('No hay cards aún, empezando con array vacío');
+      setCards([]); // ← Array vacío si hay error 404
+    });
+  }
+}, [isLoggedIn, token]);
 
   const handleLogin = (email, password) => {
     loginUser({ email, password })
@@ -154,7 +155,7 @@ function App() {
           </>
         } />
 
-        <Route path="/signin" element={
+        <Route path="/signup" element={
           <>
             <Register onRegister={handleRegister} />
             {popup && (
@@ -171,7 +172,9 @@ function App() {
             <ProtectedRoute isLoggedIn={isLoggedIn}>
               <div className="page__content">
                 <CurrentUserProvider>
-                  <Header onLogout={handleLogout} />
+                  <Header
+                    isLoggedIn={isLoggedIn}
+                    onLogout={handleLogout} />
                   <Main
                     onOpenPopup={handleOpenPopup}
                     onClosePopup={handleClosePopup}

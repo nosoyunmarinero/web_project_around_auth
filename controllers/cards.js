@@ -7,17 +7,24 @@ const SERVER_ERROR = 500;
 
 //Create (POST)
 module.exports.createCard = (req, res) => {
-
-const {name, link} = req.body;
+  const {name, link} = req.body;
   Card.create({name, link, owner: req.user._id})
-  .then(card => res.status(201).send({data: card}))
-  .catch(err => {
-    console.log(err.name);
+    .then(card => {
 
-    if(err.name === 'ValidationError'){
-      return res.status(BAD_REQUEST).send({message: 'Datos no validos al crear la card'})
-    }
-    res.status(SERVER_ERROR).send({message: 'Error al crear card :('})})
+      const cardWithLiked = {
+        ...card.toObject(),
+        isLiked: false
+      };
+      res.status(201).send({data: cardWithLiked});
+    })
+    .catch(err => {
+      console.log(err.name);
+
+      if(err.name === 'ValidationError'){
+        return res.status(BAD_REQUEST).send({message: 'Datos no validos al crear la card'})
+      }
+      res.status(SERVER_ERROR).send({message: 'Error al crear card :('})
+    });
 };
 
 //Delete (DELETE)
@@ -38,31 +45,47 @@ module.exports.deleteCard = (req, res) => {
     });
 };
 
-//GET
 module.exports.getCards = (req, res) => {
   Card.find({})
-    .then(cards => res.send({ data: cards }))
+    .then(cards => {
+      // Agregar isLiked basado en el usuario actual
+      const cardsWithLiked = cards.map(card => ({
+        ...card.toObject(),
+        isLiked: card.likes.includes(req.user._id)
+      }));
+      res.send({ data: cardsWithLiked });
+    })
     .catch(err => {
       console.log(err);
       res.status(SERVER_ERROR).send({ message: 'Error al obtener las cards' });
     });
 }
 
-//Dar like (PUT)
+
 module.exports.likeCard = (req, res) => Card.findByIdAndUpdate(
     req.params.cardId,
     {$addToSet: {likes: req.user._id} },
     {new: true},
   )
-    .then(card => res.send({data: card}))
+    .then(card => {
+      const cardWithLiked = {
+        ...card.toObject(),
+        isLiked: true
+      };
+      res.send({data: cardWithLiked});
+    })
     .catch(err => res.status(SERVER_ERROR).send({message: "Error al dar like"}))
 
-
-//Quitar Like (DELETE)
 module.exports.dislikeCard = (req, res) => Card.findByIdAndUpdate(
   req.params.cardId,
   { $pull: { likes: req.user._id } },
   { new: true },
 )
-    .then(card => res.send({data: card}))
+    .then(card => {
+      const cardWithLiked = {
+        ...card.toObject(),
+        isLiked: false // Siempre false después de quitar like
+      };
+      res.send({data: cardWithLiked});
+    })
     .catch(err => res.status(SERVER_ERROR).send({message: "Error al quitar like"}))

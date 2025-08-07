@@ -33,7 +33,7 @@ function Login({ onLogin }) {
   return (
     <div className="login">
       <Header>
-        <a href='/signin' className="signup_header__button">Regístrate</a>
+        <a href='/signup' className="signup_header__button">Regístrate</a>
       </Header>
       <h1 className="login_header">
         Inicia sessión
@@ -65,7 +65,7 @@ function Login({ onLogin }) {
         <span className="form__input-error" id="password-error"></span>
         <button type="submit" className="profile__edit-form-button login_submit">Inicia sesión</button>
       </form>
-      <a href='/signin' className="signup_button">¿Aún no eres miembro? Regístrate aquí</a>
+      <a href='/signup' className="signup_button">¿Aún no eres miembro? Regístrate aquí</a>
     </div>
   );
 }

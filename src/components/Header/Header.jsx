@@ -1,17 +1,13 @@
 import logo from "../../../images/header-logo.svg";
-import { useAuth } from "../../contexts/AuthContext";
 import { useContext } from "react";
-import {CurrentUserContext} from "../../contexts/CurrentUserContext";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
-function Header({ children }) {
-
-  const {loggedIn, setLoggedIn} = useAuth();
-  const {currentUser} = useContext(CurrentUserContext)
-
+function Header({ children, isLoggedIn, onLogout }) {
+  const { currentUser } = useContext(CurrentUserContext);
 
   return (
     <header className="header">
-      {loggedIn ? (
+      {isLoggedIn ? (
         <>
           <img
             src={logo}
@@ -19,12 +15,13 @@ function Header({ children }) {
             className="header__logo"
           />
           {currentUser?.email && (
-            <div>
-            <span className="header_email">{currentUser.email}</span>
-            <button className="header_signout">Cerrar sesión</button>
+            <div className="header__user-info">
+              <span className="header__email">{currentUser.email}</span>
+              <button className="header__signout" onClick={onLogout}>
+                Cerrar sesión
+              </button>
             </div>
           )}
-
           {children}
         </>
       ) : (
