@@ -1,15 +1,17 @@
 const express = require("express");
-//const fs = require('fs');
-
 const router = express.Router();
 
-//Controllers
+// Importar middleware de autenticación
+const auth = require('../middleware/auth');
+
+// Controllers
 const {createCard, getCards, deleteCard, likeCard, dislikeCard} = require('../controllers/cards');
 
-router.get("/", getCards);
-router.post("/", createCard);
-router.delete("/:cardId", deleteCard);
-router.put("/:cardId/likes", likeCard);
-router.delete("/:cardId/likes", dislikeCard)
+// Aplicar auth a todas las rutas
+router.get("/", auth, getCards);
+router.post("/", auth, createCard);
+router.delete("/:cardId", auth, deleteCard);
+router.put("/:cardId/likes", auth, likeCard);
+router.delete("/:cardId/likes", auth, dislikeCard);
 
 module.exports = router;

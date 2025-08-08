@@ -1,19 +1,18 @@
 const express = require("express");
-//const fs = require('fs');
-
 const router = express.Router();
 
-//Controllers
+// ← ¿ESTA LÍNEA ESTÁ?
+const auth = require('../middleware/auth');
+
 const {getUsers, getUserById, createUser, updateProfile, updateAvatar, getCurrentUser, deleteUser} = require('../controllers/users')
 
-
-router.get("/", getUsers);
-router.get('/me', getCurrentUser)
-router.get("/:id", getUserById);
 router.post("/", createUser);
-router.patch('/me',updateProfile );
-router.patch('/me/avatar', updateAvatar);
-router.delete('/:id', deleteUser); // TEST TOOL
-
+// ← ¿ESTA LÍNEA TIENE auth?
+router.get('/me', auth, getCurrentUser);
+router.get("/", auth, getUsers);
+router.get("/:id", auth, getUserById);
+router.patch('/me', auth, updateProfile);
+router.patch('/me/avatar', auth, updateAvatar);
+router.delete('/:id', auth, deleteUser);
 
 module.exports = router;

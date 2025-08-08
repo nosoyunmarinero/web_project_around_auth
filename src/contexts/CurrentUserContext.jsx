@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from "react";
+import api from "../utils/api.js"; // Importar la instancia de API
 
 export const CurrentUserContext = createContext();
 
@@ -10,34 +11,25 @@ export const CurrentUserProvider = ({children}) => {
     try {
       setIsLoading(true);
       const token = localStorage.getItem('token');
-      
+
       if (!token) {
         setIsLoading(false);
         setCurrentUser(null);
         return;
       }
 
-      const response = await fetch('http://localhost:3000/users/me', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+      // Asegurarse de que API tenga el token actualizado
+      api.updateToken(token);
 
-      if (!response.ok) {
-        if (response.status === 401) {
-          // Token inválido o expirado
-          localStorage.removeItem('token');
-        }
-        throw new Error('Error al obtener usuario actual');
-      }
-
-      const data = await response.json();
-      // Manejar ambos formatos de respuesta
-      setCurrentUser(data.data || data);
+      // Usar la instancia de API en lugar de fetch directo
+      const userData = await api.getUserInfo();
+      setCurrentUser(userData);
     } catch (error) {
       console.error('Error al cargar usuario:', error);
       setCurrentUser(null);
-      localStorage.removeItem('token');
+      if (error.message.includes('401')) {
+        localStorage.removeItem('token');
+      }
     } finally {
       setIsLoading(false);
     }

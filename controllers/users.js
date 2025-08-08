@@ -53,7 +53,7 @@ module.exports.createUser = (req, res) => {
     .catch(err =>{
       console.log('Error completo:', err.message);
       console.log('Errores de validación:', err.errors);
-      
+
       if(err.name === "ValidationError"){
         return res.status(400).send({message: 'Datos no válidos'});
       }
@@ -85,11 +85,14 @@ module.exports.updateProfile = (req, res) => {
 
 //PATCH Avatar
 
+//PATCH Avatar
 module.exports.updateAvatar = (req, res) => {
-  const {link} = req.body;
+  // Cambiar de {link} a {avatar} para que coincida con el frontend
+  const {avatar} = req.body;
+
   Users.findByIdAndUpdate(
     req.user._id,
-    {avatar: link},
+    {avatar: avatar},  // o simplemente {avatar}
     {new: true, runValidators: true}
   )
     .then(user => {
@@ -100,26 +103,40 @@ module.exports.updateAvatar = (req, res) => {
       if (err.name === 'ValidationError') {
         return res.status(BAD_REQUEST).send({message: "URL no valida"})
       }
+      res.status(SERVER_ERROR).send({message: "Error del servidor"});
     })
 }
 
 //GET current user
 module.exports.getCurrentUser = (req, res) => {
-  Users.findById(req.user._id)
-    .orFail(() => {
-      const error = new Error('NOT_FOUND');
-      error.statusCode = NOT_FOUND;
-      throw error;
+  console.log('🎯 CONTROLLER getCurrentUser - Usuario decodificado:', req.user);
+  console.log('🎯 CONTROLLER getCurrentUser - ID que se busca:', req.user._id);
+
+  // Primero vamos a listar TODOS los usuarios para ver qué hay en la DB
+  Users.find({})
+    .then((allUsers) => {
+      console.log('🎯 CONTROLLER getCurrentUser - TODOS los usuarios en DB:', allUsers.length);
+      allUsers.forEach((user, index) => {
+        console.log(`  Usuario ${index + 1}: ID = ${user._id}, Email = ${user.email}`);
+      });
+
+      // Ahora intentamos buscar el usuario específico
+      return Users.findById(req.user._id);
     })
     .then((user) => {
-      // Asegurar formato consistente
+      if (!user) {
+        console.log('🎯 CONTROLLER getCurrentUser - Usuario NO encontrado con findById');
+        throw new Error('NOT_FOUND');
+      }
+      console.log('🎯 CONTROLLER getCurrentUser - Usuario SÍ encontrado:', user);
       res.send({ data: user });
     })
     .catch(err => {
-      if (err.statusCode === 404) {
-        return res.status(NOT_FOUND).send({ message: 'Usuario no encontrado' });
+      console.log('🎯 CONTROLLER getCurrentUser - Error:', err);
+      if (err.message === 'NOT_FOUND') {
+        return res.status(404).send({ message: 'Usuario no encontrado' });
       }
-      res.status(SERVER_ERROR).send({ message: 'Error en el servidor' });
+      res.status(500).send({ message: 'Error en el servidor' });
     });
 };
 

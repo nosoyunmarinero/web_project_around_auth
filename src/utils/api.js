@@ -10,7 +10,7 @@ class Api {
     getInitialCards() {
       return fetch(`${this._options.baseUrl}/cards`, {
         headers: {
-          authorization: this._options.headers.authorization,
+          'Authorization': this._options.headers.authorization,
         },
       })
         .then((res) => {
@@ -35,21 +35,30 @@ class Api {
     }
 
     getUserInfo() {
-      return fetch(`${this._options.baseUrl}/users/me`, {
-        headers: {
-          authorization: this._options.headers.authorization,
-        },
-      }).then((res) => {
-        if (!res.ok) throw new Error(`Error: ${res.status}`);
-        return res.json();
-      }).then((data) => {
-        console.log('API getUserInfo response:', data);
-        return data.data;
-      }).catch(err => {
-        console.error('Error al obtener información del usuario:', err);
-        throw err;
-      });
-    }
+  console.log('🔍 API getUserInfo - Headers globales:', this._options.headers);
+  console.log('🔍 API getUserInfo - Authorization específico:', this._options.headers.authorization);
+
+  const headers = {
+    'Authorization': this._options.headers.authorization,
+    'Content-Type': 'application/json',
+  };
+
+  console.log('🔍 API getUserInfo - Headers que se enviarán:', headers);
+
+  return fetch(`${this._options.baseUrl}/users/me`, {
+    headers: headers,
+  }).then((res) => {
+    console.log('🔍 API getUserInfo - Response status:', res.status);
+    if (!res.ok) throw new Error(`Error: ${res.status}`);
+    return res.json();
+  }).then((data) => {
+    console.log('🔍 API getUserInfo - Response data:', data);
+    return data.data;
+  }).catch(err => {
+    console.error('❌ API getUserInfo - Error:', err);
+    throw err;
+  });
+}
 
     setUserInfo(newUserData) {
       return fetch(`${this._options.baseUrl}/users/me`, {
@@ -71,14 +80,14 @@ class Api {
     }
 
     setAvatar(newAvatarData) {
-      return fetch(`${this._options.baseUrl}/users/me/avatar`, {
+      return fetch(`${this._options.baseUrl}/users/me`, {
         method: "PATCH",
         headers: {
           authorization: this._options.headers.authorization,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          link: newAvatarData.avatar
+          avatar: newAvatarData.avatar
         }),
       })
         .then((res) => {
