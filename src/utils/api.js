@@ -133,7 +133,6 @@ class Api {
     }
   }
 
-  // AQUÍ ESTÁ EL CAMBIO PRINCIPAL:
   const api = new Api({
     baseUrl: "https://se-register-api.en.tripleten-services.com/v1",
     headers: {
