@@ -35,24 +35,18 @@ class Api {
     }
 
     getUserInfo() {
-  console.log('🔍 API getUserInfo - Headers globales:', this._options.headers);
-  console.log('🔍 API getUserInfo - Authorization específico:', this._options.headers.authorization);
 
   const headers = {
     'Authorization': this._options.headers.authorization,
     'Content-Type': 'application/json',
   };
 
-  console.log('🔍 API getUserInfo - Headers que se enviarán:', headers);
-
   return fetch(`${this._options.baseUrl}/users/me`, {
     headers: headers,
   }).then((res) => {
-    console.log('🔍 API getUserInfo - Response status:', res.status);
     if (!res.ok) throw new Error(`Error: ${res.status}`);
     return res.json();
   }).then((data) => {
-    console.log('🔍 API getUserInfo - Response data:', data);
     return data.data;
   }).catch(err => {
     console.error('❌ API getUserInfo - Error:', err);
@@ -141,7 +135,7 @@ class Api {
 
   // AQUÍ ESTÁ EL CAMBIO PRINCIPAL:
   const api = new Api({
-    baseUrl: "http://localhost:3000",
+    baseUrl: "https://se-register-api.en.tripleten-services.com/v1",
     headers: {
       "Content-Type": "application/json",
     },
