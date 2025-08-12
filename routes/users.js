@@ -7,7 +7,6 @@ const auth = require('../middleware/auth');
 const {getUsers, getUserById, createUser, updateProfile, updateAvatar, getCurrentUser, deleteUser} = require('../controllers/users')
 
 router.post("/", createUser);
-// ← ¿ESTA LÍNEA TIENE auth?
 router.get('/me', auth, getCurrentUser);
 router.get("/", auth, getUsers);
 router.get("/:id", auth, getUserById);

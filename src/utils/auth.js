@@ -31,6 +31,3 @@ export function loginUser({ email, password }) {
     return res.json();
   });
 }
-
-//nuevousuario@gmail.com
-//MiPassword123

@@ -43,7 +43,11 @@ module.exports.createUser = (req, res) => {
       // Hash de la contraseña
       return bcrypt.hash(password, 10)
         .then((hash) => User.create({
-          name, about, avatar, email, password: hash,
+          name: name || 'Usuario', // Valor por defecto
+          about: about || 'Nuevo usuario', // Valor por defecto
+          avatar: avatar || 'https://via.placeholder.com/150', // Avatar por defecto
+          email,
+          password: hash,
         }))
         .then((newUser) => {
           // Excluir password del resultado
@@ -53,7 +57,7 @@ module.exports.createUser = (req, res) => {
         })
         .catch((err) => {
           if (err.name === 'ValidationError') {
-            return res.status(BAD_REQUEST).send({ message: 'Datos no válidos' });
+            return res.status(BAD_REQUEST).send({ message: 'Datos no válidoooooss' });
           }
           return res.status(SERVER_ERROR).send({ message: 'Error del servidor' });
         });

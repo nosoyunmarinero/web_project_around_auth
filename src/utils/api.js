@@ -1,7 +1,7 @@
 class Api {
   constructor(options) {
-    this.baseUrl = options.baseUrl; // CAMBIO: guardamos baseUrl directo
-    this.registerUrl = options.registerUrl; // CAMBIO: guardamos registerUrl directo
+    this.baseUrl = options.baseUrl;
+    this.registerUrl = options.registerUrl;
     this._options = options;
   }
 
@@ -12,16 +12,13 @@ class Api {
   _getHeaders() {
   return {
     'Content-Type': 'application/json',
-    'Authorization': `Bearer ${localStorage.getItem('token')}`
+    'Authorization': "6d7a4746-c967-4ae3-8600-489d4d9a2274"
   };
 }
 
   getInitialCards() {
-    return fetch(`${this.baseUrl}/users/me/cards`, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': savedToken,
-      }
+    return fetch(`${this.baseUrl}/cards`, {
+      headers: this._getHeaders()
     })
       .then(res => {
         if (!res.ok) throw new Error(`Error: ${res.status}`);
@@ -31,9 +28,9 @@ class Api {
   }
 
   addNewCard(newCardData) {
-    return fetch(`${this.baseUrl}cards`, {
+    return fetch(`${this.baseUrl}/cards`, {
       method: "POST",
-      headers: this._getHeaders({ "Content-Type": "application/json" }), // CAMBIO
+      headers: this._getHeaders({ "Content-Type": "application/json" }),
       body: JSON.stringify({
         name: newCardData.name,
         link: newCardData.link
@@ -47,8 +44,11 @@ class Api {
   }
 
   getUserInfo() {
-    return fetch(`${this.registerUrl}/users/me`, { // CAMBIO: uso this.registerUrl
-      headers: this._getHeaders({ "Content-Type": "application/json" }) // CAMBIO
+    return fetch(`${this.registerUrl}/users/me`, {
+      headers: {
+      "Content-Type": "application/json",
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
     })
       .then(res => {
         if (!res.ok) throw new Error(`Error: ${res.status}`);
@@ -56,7 +56,7 @@ class Api {
       })
       .then(data => data.data)
       .catch(err => {
-        console.error("❌ API getUserInfo - Error:", err);
+        console.error(" API getUserInfo - Error:", err);
         throw err;
       });
   }
@@ -64,7 +64,7 @@ class Api {
   setUserInfo(newUserData) {
     return fetch(`${this.baseUrl}/users/me`, {
       method: "PATCH",
-      headers: this._getHeaders({ "Content-Type": "application/json" }), // CAMBIO
+      headers: this._getHeaders({ "Content-Type": "application/json" }),
       body: JSON.stringify({
         name: newUserData.name,
         about: newUserData.about
@@ -78,9 +78,9 @@ class Api {
   }
 
   setAvatar(newAvatarData) {
-    return fetch(`${this.baseUrl}/users/me`, {
+    return fetch(`${this.baseUrl}/users/me/avatar`, {
       method: "PATCH",
-      headers: this._getHeaders({ "Content-Type": "application/json" }), // CAMBIO
+      headers: this._getHeaders({ "Content-Type": "application/json" }),
       body: JSON.stringify({
         avatar: newAvatarData.avatar
       })
@@ -95,7 +95,7 @@ class Api {
   deleteCard(clickedButtonID) {
     return fetch(`${this.baseUrl}/cards/${clickedButtonID}`, {
       method: "DELETE",
-      headers: this._getHeaders() // CAMBIO
+      headers: this._getHeaders()
     })
       .then(res => {
         if (!res.ok) throw new Error(`Error: ${res.status}`);
@@ -112,7 +112,7 @@ class Api {
     const body = isLiked ? JSON.stringify({ isLiked: true }) : null;
     return fetch(`${this.baseUrl}/cards/${clickedButtonID}/likes`, {
       method,
-      headers: this._getHeaders({ "Content-Type": "application/json" }), // CAMBIO
+      headers: this._getHeaders({ "Content-Type": "application/json" }),
       body
     })
       .then(res => {
@@ -131,7 +131,8 @@ const api = new Api({
   baseUrl: "https://around-api.es.tripleten-services.com/v1",
   registerUrl: "https://se-register-api.en.tripleten-services.com/v1",
   headers: {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
   }
 });
 

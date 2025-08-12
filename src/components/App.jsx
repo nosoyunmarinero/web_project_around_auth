@@ -30,15 +30,16 @@ function App() {
   }, []);
 
   useEffect(() => {
-  if (isLoggedIn && token) {
-    api.getInitialCards().then((data) => {
-      setCards(data || []); // ← Si no hay data, array vacío
-    }).catch(err => {
-      console.log('No hay cards aún, empezando con array vacío');
-      setCards([]); // ← Array vacío si hay error 404
-    });
-  }
-}, [isLoggedIn, token]);
+    if (isLoggedIn && token) {
+      api.getInitialCards().then((data) => {
+        const validCards = Array.isArray(data) ? data.filter(card => card && card._id) : [];
+        setCards(validCards);
+      }).catch(err => {
+        console.log('No hay cards aún, empezando con array vacío');
+        setCards([]);
+      });
+    }
+  }, [isLoggedIn, token]);
 
   const handleLogin = (email, password) => {
     loginUser({ email, password })
@@ -83,13 +84,13 @@ function App() {
   };
 
   const handleAddPlaceSubmit = (data) => {
-    (async () => {
-      await api.addNewCard(data).then((newCard) => {
-        setCards([newCard, ...cards]);
+    api.addNewCard(data)
+      .then((newCard) => {
+        setCards(prevCards => [newCard, ...prevCards]);
         handleClosePopup();
-      });
-    })();
-  }
+      })
+      .catch(err => console.error('Error al agregar card:', err));
+  };
 
   const handleUpdateUser = (data, currentUser, setCurrentUser) => {
     (async () => {

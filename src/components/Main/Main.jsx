@@ -49,12 +49,9 @@ export default function Main({popup, onOpenPopup, onClosePopup, onUpdateAvatar, 
         </section>
         {/* Contenedor de tarjetas */}
         <div className="element-list__item">
-          {/*Aqui aparecen las cards creadas con JS*/}
-          {cards.map((card) => (
-      <Card key={card._id} card={card} handleOpenPopup={onOpenPopup} onCardLike={onCardLike} onCardDelete={onCardDelete}
-
-      />
-    ))}
+          {cards.filter(card => card && card._id).map((card) => (
+            <Card key={card._id} card={card} handleOpenPopup={onOpenPopup} onCardLike={onCardLike} onCardDelete={onCardDelete} />
+          ))}
         </div>
         {/*Footer*/}
         <Footer />
