@@ -40,7 +40,7 @@ class FormValidator {
     });
   }
 
-  toggleSaveButton(inputList, buttonElement) {
+ /* toggleSaveButton(inputList, buttonElement) {
     if (this.hasInvalidInput(inputList)) {
       buttonElement.disabled = true;
       buttonElement.style.backgroundColor = "transparent";
@@ -52,7 +52,14 @@ class FormValidator {
       buttonElement.style.color = "white";
       buttonElement.style.cursor = "pointer";
     }
-  }
+  } */
+
+    toggleSaveButton(buttonElement) {
+      this.hasInvalidInput ?
+      buttonElement.disabled = true :
+      buttonElement.disabled = false;
+    }
+
 
   setEventListener() {
     if (this.formRef) {

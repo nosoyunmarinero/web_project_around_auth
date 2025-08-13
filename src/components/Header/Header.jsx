@@ -4,7 +4,9 @@ import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
 function Header({ children, isLoggedIn, onLogout }) {
   const { currentUser } = useContext(CurrentUserContext);
-
+    console.log('isLoggedIn:', isLoggedIn);
+  console.log('currentUser:', currentUser);
+  console.log('currentUser?.email:', currentUser?.email);
   return (
     <header className="header">
       {isLoggedIn ? (

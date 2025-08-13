@@ -15,6 +15,7 @@ import editIcon from "../../../images/edit-button.svg";
 export default function Main({popup, onOpenPopup, onClosePopup, onUpdateAvatar, cards, onCardLike, onCardDelete, onCardSubmit}) {
 
   const {currentUser} = useContext(CurrentUserContext);
+  // const context = useContext(CurrentUserContext);
 
 
   const newCardPopup = { title: "Nuevo lugar", children: <NewCard onCardSubmit={onCardSubmit}/> };

@@ -24,7 +24,6 @@ class Api {
         if (!res.ok) throw new Error(`Error: ${res.status}`);
         return res.json();
       })
-      .then(data => data.data);
   }
 
   addNewCard(newCardData) {
@@ -40,21 +39,16 @@ class Api {
         if (!res.ok) throw new Error(`Error: ${res.status}`);
         return res.json();
       })
-      .then(data => data.data);
   }
 
   getUserInfo() {
-    return fetch(`${this.registerUrl}/users/me`, {
-      headers: {
-      "Content-Type": "application/json",
-    'Authorization': `Bearer ${localStorage.getItem('token')}`
-      }
+    return fetch(`${this.baseUrl}/users/me`, {
+      headers: this._getHeaders({ "Content-Type": "application/json" }),
     })
       .then(res => {
         if (!res.ok) throw new Error(`Error: ${res.status}`);
         return res.json();
       })
-      .then(data => data.data)
       .catch(err => {
         console.error(" API getUserInfo - Error:", err);
         throw err;
@@ -74,7 +68,6 @@ class Api {
         if (!res.ok) throw new Error(`Error: ${res.status}`);
         return res.json();
       })
-      .then(data => data.data);
   }
 
   setAvatar(newAvatarData) {
@@ -89,7 +82,6 @@ class Api {
         if (!res.ok) throw new Error(`Error: ${res.status}`);
         return res.json();
       })
-      .then(data => data.data);
   }
 
   deleteCard(clickedButtonID) {
@@ -119,7 +111,6 @@ class Api {
         if (!res.ok) throw new Error(`Error: ${res.status}`);
         return res.json();
       })
-      .then(data => data.data);
   }
 
   renderTextLoading(isLoading, saveButtonElement) {

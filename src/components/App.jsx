@@ -9,6 +9,7 @@ import ProtectedRoute from './ProtectedRoute/ProtectedRoute.jsx';
 import Login from "./Login/Login.jsx"
 import Register from "./Register/Register.jsx";
 import Popup from './Main/Popup/Popup.jsx';
+import InfoTooltip from './InfoTooltip/InfoTooltip.jsx';
 
 function App() {
   const [popup, setPopup] = useState(null);
@@ -41,8 +42,10 @@ function App() {
     }
   }, [isLoggedIn, token]);
 
+
+
   const handleLogin = (email, password) => {
-    loginUser({ email, password })
+    return loginUser({ email, password })
       .then(response => {
         console.log('Login response:', response);
 
@@ -53,14 +56,11 @@ function App() {
         api.updateToken(response.token);
 
         console.log('Login exitoso');
-        navigate('/'); // Redirigir a la página principal
+        navigate('/');
       })
       .catch(error => {
         console.error('Error en login:', error);
-        handleOpenPopup({
-          title: "Error",
-          children: <p>Error al iniciar sesión</p>
-        });
+        throw error;
       });
   };
 
@@ -144,9 +144,8 @@ function App() {
       <Routes>
         <Route path="/login" element={
           <>
-            <Login
+            <Login onLogin={handleLogin}
               handleOpenPopup={handleOpenPopup}
-              onLogin={handleLogin}
             />
             {popup && (
               <Popup onClose={handleClosePopup} title={popup.title}>
@@ -158,7 +157,9 @@ function App() {
 
         <Route path="/signup" element={
           <>
-            <Register onRegister={handleRegister} />
+            <Register onRegister={handleRegister}
+             handleOpenPopup={handleOpenPopup}
+             />
             {popup && (
               <Popup onClose={handleClosePopup} title={popup.title}>
                 {popup.children}
