@@ -42,6 +42,7 @@ class Api {
   }
 
   getUserInfo() {
+    console.log(this._getHeaders());
     return fetch(`${this.baseUrl}/users/me`, {
       headers: this._getHeaders({ "Content-Type": "application/json" }),
     })

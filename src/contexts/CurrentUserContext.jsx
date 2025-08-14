@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import api from "../utils/api.js"; // Importar la instancia de API
+import { getUserInfo } from "../utils/auth.js";
 
 export const CurrentUserContext = createContext();
 
@@ -19,11 +20,13 @@ export const CurrentUserProvider = ({children}) => {
       }
 
       // Asegurarse de que API tenga el token actualizado
-      api.updateToken(token);
+      // api.updateToken(token);
 
       // Usar la instancia de API en lugar de fetch directo
       const userData = await api.getUserInfo();
-      setCurrentUser(userData);
+      const userDataWithToken = await getUserInfo();
+      console.log(userDataWithToken)
+      setCurrentUser({...userData, ...userDataWithToken.data});
     } catch (error) {
       console.error('Error al cargar usuario:', error);
       setCurrentUser(null);
